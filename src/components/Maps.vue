@@ -29,8 +29,13 @@
                 :properties="randomFeatureProperties"
             />
         </div>
+
         <div class="container-map_controls">
             <div class="container-map_btns">
+                <v-btn fab x-small @click="showNotepad">
+                    <v-icon dark> mdi-file-document-edit </v-icon>
+                </v-btn>
+
                 <v-btn
                     id="btnDown"
                     fab
@@ -77,45 +82,41 @@
             :bbox="bbox"
             @setSeletedPos="setSeletedPos"
         />
-        <MapCountries
-            v-if="this.mode === 'country'"
+        <MapAreas
+            v-if="this.mode !== 'classic'"
             id="map"
             ref="map"
-            :country="country"
+            :area="area"
+            :areasGeoJsonUrl="areasGeoJsonUrl"
+            :pathKey="pathKey"
             :bbox="bbox"
+            :showFlag="this.mode === 'country'"
             @setSeletedPos="setSeletedPos"
         />
-        <div class="container-map_controls_guess">
-            <button
-                v-if="
-                    !isNextButtonVisible &&
-                        !isSummaryButtonVisible &&
-                        ($viewport.width > 450 || isMakeGuessButtonClicked)
-                "
-                id="reset-button"
-                :disabled="isGuessButtonClicked || (!!this.room && !isReady)"
-                @click="resetLocation"
-            >
-                {{ $t('Maps.reset') }}
-            </button>
-            <button
-                v-if="
-                    !isNextButtonVisible &&
-                        !isSummaryButtonVisible &&
-                        ($viewport.width > 450 || isMakeGuessButtonClicked)
-                "
-                id="guess-button"
-                :disabled="
-                    randomLatLng == null ||
-                        selectedPos == null ||
-                        isGuessButtonClicked ||
-                        (!!this.room && !isReady)
-                "
-                @click="selectLocation"
-            >
-                {{ $t('Maps.guess') }}
-            </button>
-        </div>
+        <textarea
+            class="container-map_notepad"
+            v-show="isNotepadVisible"
+            spellcheck="false"
+            v-if="!printMapFull"
+            ref="refNotepad"
+        />
+        <button
+            v-if="
+                !isNextButtonVisible &&
+                    !isSummaryButtonVisible &&
+                    ($viewport.width > 450 || isMakeGuessButtonClicked)
+            "
+            id="guess-button"
+            :disabled="
+                randomLatLng == null ||
+                    selectedPos == null ||
+                    isGuessButtonClicked ||
+                    (!!this.room && !isReady)
+            "
+            @click="selectLocation"
+        >
+            {{ $t('Maps.guess') }}
+        </button>
         <button
             v-if="isNextButtonVisible"
             id="next-button"
@@ -155,7 +156,9 @@
             :player-name="playerName"
             :points="points"
             :game="game"
-            :multiplayer="!!this.room"
+            :multiplayer="!!room"
+            :mapDetails="mapDetails"
+            :nb-round="nbRound"
             @finishGame="finishGame"
             @playAgain="goToNextRound(true)"
         />
@@ -169,16 +172,17 @@ import 'firebase/database';
 import DialogSummary from '@/components/DialogSummary';
 import DetailsMap from '@/components/game/DetailsMap';
 import Map from '@/components/map/Map';
-import MapCountries from '@/components/map/MapCountries';
+import MapAreas from '@/components/map/MapAreas';
 import { GAME_MODE } from '../constants';
-import { getScore, getSelectedPos } from '../utils';
+import { getSelectedPos } from '../utils';
+import { getScore } from '../utils/game/score';
 
 export default {
     components: {
         DialogSummary,
         DetailsMap,
         Map,
-        MapCountries,
+        MapAreas,
     },
     props: [
         'randomLatLng',
@@ -194,11 +198,14 @@ export default {
         'difficulty',
         'bbox',
         'mode',
-        'country',
+        'area',
         'timeAttack',
         'nbRound',
         'countdown',
         'scoreMode',
+        'areasGeoJsonUrl',
+        'pathKey',
+        'mapDetails',
     ],
     data() {
         return {
@@ -216,6 +223,7 @@ export default {
             dialogSummary: false,
             activeMap: false,
             size: 2,
+            isNotepadVisible: false,
             pinActive: false,
             printMapFull: false,
             countdownStarted: false,
@@ -247,12 +255,20 @@ export default {
         this.game.mode = this.mode;
         this.game.timeAttack = this.timeAttack;
         this.game.playerName = this.playerName;
+        let size = 0;
 
         if (this.roomName) {
             this.room = firebase.database().ref(this.roomName);
+
             this.room.on('value', (snapshot) => {
                 // Check if the room is already removed
                 if (snapshot.hasChild('active')) {
+                    size = snapshot.child('size').val();
+                    if (size === 1) {
+                        this.room.onDisconnect().remove();
+                    } else {
+                        this.room.onDisconnect().update({ size: size - 1 });
+                    }
                     if (
                         // If Time Attack and 1st true guess finish round
                         (this.timeAttack &&
@@ -262,12 +278,10 @@ export default {
                                 .child('guess')
                                 .forEach(
                                     (guess) =>
-                                        guess.child('country').val() ===
-                                        this.country
+                                        guess.child('area').val() === this.area
                                 )) ||
                         // Allow players to move on to the next round when every players guess locations
-                        snapshot.child('guess').numChildren() ===
-                            snapshot.child('size').val()
+                        snapshot.child('guess').numChildren() === size
                     ) {
                         this.game.timeLimitation = this.timeLimitation;
                         this.isNextStreetViewReady = false;
@@ -276,7 +290,6 @@ export default {
 
                         // Put markers and draw polylines on the map
                         let i = 0;
-                        let j = 1;
                         let players = {};
                         snapshot.child('guess').forEach((childSnapshot) => {
                             let posGuess;
@@ -292,7 +305,7 @@ export default {
                                     lng: lng,
                                 });
                             } else {
-                                posGuess = childSnapshot.child('country').val();
+                                posGuess = childSnapshot.child('area').val();
                             }
 
                             const playerName = snapshot
@@ -300,12 +313,7 @@ export default {
                                 .child(childSnapshot.key)
                                 .val();
                             const roundValues = snapshot
-                                .child(
-                                    'round' +
-                                        this.round +
-                                        '/player' +
-                                        j 
-                                )
+                                .child('round' + this.round + '/' + childSnapshot.key)
                                 .exportVal();
 
                             const { points, distance } = roundValues;
@@ -334,13 +342,12 @@ export default {
                                 posGuess
                             );
                             i++;
-                            j++;
                         });
                         this.$refs.map.fitBounds();
                         this.game.rounds.push({
                             position: {
                                 ...this.randomLatLng.toJSON(),
-                                country: this.country,
+                                area: this.area,
                             },
                             players,
                         });
@@ -416,6 +423,14 @@ export default {
         hideMap() {
             this.isMakeGuessButtonClicked = false;
         },
+        showNotepad() {
+            this.isNotepadVisible = !this.isNotepadVisible;
+            if (this.isNotepadVisible) {
+                setTimeout(() => {
+                    this.$refs.refNotepad.focus();
+                });
+            }
+        },
         selectLocation() {
             this.calculateDistance();
 
@@ -442,8 +457,8 @@ export default {
                     false,
                     this.setSeletedPos
                 );
-                this.$refs.map.fitBounds();
                 this.printMapFull = true;
+                this.$refs.map.fitBounds();
                 if (this.round >= this.nbRound) {
                     this.isSummaryButtonVisible = true;
                 } else {
@@ -475,8 +490,10 @@ export default {
         },
         calculateDistance() {
             const timePassed = new Date() - this.startTime;
-            if (this.mode === GAME_MODE.COUNTRY) {
-                this.point = +(this.country === this.selectedPos);
+            if (
+                [GAME_MODE.COUNTRY, GAME_MODE.CUSTOM_AREA].includes(this.mode)
+            ) {
+                this.point = +(this.area === this.selectedPos);
                 this.distance = null;
             } else {
                 this.distance = Math.floor(
@@ -506,7 +523,7 @@ export default {
             } else {
                 this.game.rounds.push({
                     guess: this.selectedPos,
-                    country: this.country,
+                    area: this.area,
                     position: this.randomLatLng,
                     distance: this.distance,
                     points: this.point,
@@ -517,8 +534,6 @@ export default {
             this.$emit('calculateDistance', this.distance, this.point);
         },
         startNextRound() {
-            // eslint-disable-next-line no-debugger
-            debugger;
             this.$refs.map.startNextRound();
             this.startTime = new Date();
         },
@@ -534,6 +549,7 @@ export default {
             this.isSelected = false;
             this.isNextButtonVisible = false;
             this.countdownStarted = false;
+            this.isNotepadVisible = false;
 
             if (this.$viewport.width < 450) {
                 // Hide the map if the player is on mobile
@@ -543,6 +559,7 @@ export default {
             this.printMapFull = false;
             this.$refs.map.removeMarkers();
             this.$refs.map.removePolylines();
+            this.$refs.map.centerOnBbox();
 
             // Replace the streetview with the next one
             this.$emit('goToNextRound', isPlayAgain);
@@ -606,8 +623,8 @@ export default {
     &.container-map--full {
         transition: none;
         opacity: 1;
-        --active-width: 65vw;
-        --inactive-width: 65vw;
+        --active-width: 85vw;
+        --inactive-width: 85vw;
         position: relative;
         margin: auto;
         .container-map_controls {
@@ -636,6 +653,22 @@ export default {
         display: flex;
         flex-direction: row-reverse;
     }
+
+    .container-map_notepad {
+        position: absolute;
+        background-color: #fafafa;
+        resize: none;
+        left: var(--width);
+        margin-left: 10px;
+        transition: 0.3s;
+        width: 300px;
+        height: calc(100% - 74px);
+        top: 30px;
+        border-radius: 3px;
+        outline: none;
+        padding: 5px;
+        box-shadow: 0px 2px 8px 0px rgba(99, 99, 99, 0.2);
+    }
 }
 
 #make-guess-button,
@@ -645,7 +678,8 @@ export default {
 #reset-button,
 #play-again-button {
     border: none;
-    border-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
     opacity: 0.8;
     color: white;
     font-size: 16px;
@@ -655,12 +689,11 @@ export default {
     z-index: 999;
 }
 
-#make-guess-button,
-#guess-button {
-    width: 75%;
-}
 
 #reset-button {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
     width: 25%;
     background-color: #ff5e5e;
 }
@@ -713,6 +746,9 @@ button.w-50 {
         .container-map_controls {
             display: none;
         }
+        .container-map_notepad {
+            display: none;
+        }
         #map {
             display: none;
         }
@@ -749,13 +785,7 @@ button.w-50 {
         bottom: 0;
         width: 100%;
     }
-    #guess-button {
-        width: 75%;
-    }
 
-    #reset-button {
-        width: 25%;
-    }
 
     #hide-map-button {
         position: absolute;

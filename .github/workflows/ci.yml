@@ -6,6 +6,19 @@ on:
   pull_request:
 
 jobs:
+  checksecret:
+    name: check if MY_SECRET is set in github secrets
+    runs-on: ubuntu-latest
+    outputs:
+      is_MY_SECRET_set: ${{ steps.checksecret_job.outputs.is_MY_SECRET_set }}
+    steps:
+      - name: Check whether unity activation requests should be done
+        id: checksecret_job
+        env:
+            MY_SECRET: ${{ secrets.GMAP_API_KEY }}
+        run: |
+            echo "is_MY_SECRET_set: ${{ env.MY_SECRET != '' }}"
+            echo "::set-output name=is_MY_SECRET_set::${{ env.MY_SECRET != '' }}"
   integration:
     env:
       VUE_APP_API_KEY: YOUR_GOOGLE_MAPS_API_KEY
@@ -17,26 +30,25 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest] # , macos-latest, windows-latest
-        node: [12]
     runs-on: ${{ matrix.os }}
     steps:
     - name: Set git to use LF
       run: |
         git config --global core.autocrlf false
         git config --global core.eol lf
-    - uses: actions/checkout@v1
-    - uses: actions/cache@v1
+    - uses: actions/checkout@v3
+    - uses: actions/cache@v3.0.5
       id: cache
       if: matrix.os != 'windows-latest'
       with:
         path: ~/.npm          
-        key: ${{ matrix.os }}-node-v${{ matrix.node }}-deps-${{ hashFiles('**/package-lock.json') }}
+        key: ${{ matrix.os }}-node-deps-${{ hashFiles('**/package-lock.json') }}
     - name: Get npm cache directory
       id: npm-cache
       if: matrix.os == 'windows-latest'
       run: |
         echo "::set-output name=dir::$(npm config get cache)"
-    - uses: actions/cache@v2
+    - uses: actions/cache@v3.0.5
       if: matrix.os == 'windows-latest'
       with:
         path: ${{ steps.npm-cache.outputs.dir }}
@@ -45,26 +57,57 @@ jobs:
       run: npm ci
 
     - name: Linter
-      run: npm run lint -- --no-fix
+      run: NODE_ENV=production npm run lint -- --no-fix
 
     - name: Run unit tests
       run: npm run test:unit
 
     - name: Code coverage
       if:  matrix.os == 'ubuntu-latest'
-      uses: codecov/codecov-action@v1
+      uses: codecov/codecov-action@v3
 
     - name: Build
       run: npm run build
 
     - name: Upload artifact
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v3
       with:
-        name: ${{ matrix.os }}-node-v${{ matrix.node }}-build
+        name: ${{ matrix.os }}-node-build
         path: dist
 
+
+  cypress-chrome-firefox-simple:
+    needs: [checksecret, integration]
+    if: needs.checksecret.outputs.is_MY_SECRET_set == 'false'
+    runs-on: ubuntu-latest
+    name: E2E Simple on Ubuntu
+    strategy:
+      fail-fast: false
+      matrix:
+        browsers: [chrome]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: cypress-io/github-action@v4
+        with:
+          start: npm run serve
+          wait-on: 'http://localhost:8080'
+          record: true
+          group: ${{matrix.browsers}}
+          tag: ${{ github.event_name }}
+          browser: ${{matrix.browsers}}
+          spec: |
+            tests/e2e/specs/homePage.test.js
+          wait-on-timeout: 500
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          COMMIT_INFO_MESSAGE: ${{ github.event.pull_request.title }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+
   cypress-chrome-firefox:
-    needs: integration
+    needs: [checksecret, integration]
+    if: needs.checksecret.outputs.is_MY_SECRET_set == 'true'
     env:
       VUE_APP_API_KEY:  ${{ secrets.GMAP_API_KEY }}
       VUE_APP_FIREBASE_API_KEY:  ${{ secrets.VUE_APP_FIREBASE_API_KEY }}
@@ -74,16 +117,16 @@ jobs:
       VUE_APP_FIREBASE_MESSAGING_SENDER_ID:  ${{ secrets.VUE_APP_FIREBASE_MESSAGING_SENDER_ID }}
       VUE_APP_FIREBASE_PROJECT_ID:  ${{ secrets.VUE_APP_FIREBASE_PROJECT_ID }}
       VUE_APP_STORAGE_BUCKET:  ${{ secrets.VUE_APP_STORAGE_BUCKET }}
-    runs-on: ubuntu-16.04
+    runs-on: ubuntu-latest
     name: E2E on Ubuntu
     strategy:
       fail-fast: false
       matrix:
-        containers: [1, 2, 3, 4]
-        browsers: [chrome, firefox]
+        containers: [1, 2, 3]
+        browsers: [chrome]
     steps:
-      - uses: actions/checkout@v1
-      - uses: cypress-io/github-action@v2
+      - uses: actions/checkout@v3
+      - uses: cypress-io/github-action@v4
         with:
           start: npm run serve
           wait-on: 'http://localhost:8080'
@@ -92,9 +135,11 @@ jobs:
           group: ${{matrix.browsers}}
           tag: ${{ github.event_name }}
           browser: ${{matrix.browsers}}
+          wait-on-timeout: 500
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           COMMIT_INFO_MESSAGE: ${{ github.event.pull_request.title }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   # cypress-edge:    
   #   needs: integration
@@ -116,7 +161,7 @@ jobs:
   #       run: |
   #         git config --global core.autocrlf false
   #         git config --global core.eol lf
-  #     - uses: actions/checkout@v1
+  #     - uses: actions/checkout@v3
   #     - uses: cypress-io/github-action@v2
   #       with:
   #         start: npm run serve

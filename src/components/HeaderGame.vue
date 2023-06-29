@@ -20,24 +20,23 @@
             <div class="flex-grow-1" />
             <div class="round-score-container">
                 <span class="sub-text">{{ $t('HeaderGame.round') }}: </span>
-            </div>
-            <div>
                 <span id="roundLabel" class="main-text">
                     {{ round }} / {{ nbRound }}
                 </span>
             </div>
             <div v-if="isDistanceVisible" class="round-score-container">
                 <span class="sub-text">{{ $t('HeaderGame.distance') }}: </span>
-            </div>
-            <div v-if="isDistanceVisible">
                 <span class="main-text">{{
-                    $t('HeaderGame.kmaway', { value: new Intl.NumberFormat($i18n.locale).format(distance / 1000) })
+                    $t('HeaderGame.kmaway', {
+                        value: new Intl.NumberFormat($i18n.locale).format(
+                            distance / 1000
+                        ),
+                    })
                 }}</span>
             </div>
             <div class="round-points-container">
                 <span class="sub-text">{{ $t('HeaderGame.score') }}: </span>
-            </div>
-            <div>
+    
                 <span class="main-text">{{ points }}</span>
             </div>
         </v-app-bar>
@@ -79,9 +78,6 @@ export default {
         isDistanceVisible() {
             return this.mode !== GAME_MODE.COUNTRY;
         },
-    },
-    mounted() {
-        this.startTimer();
     },
     methods: {
         startTimer() {

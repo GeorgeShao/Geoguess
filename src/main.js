@@ -66,10 +66,10 @@ const firebaseConfig = {
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
-firebase.analytics();
+if (firebaseConfig.measurementId) firebase.analytics();
 
 new Vue({
-    vuetify,
+    vuetify: vuetify(i18n),
     router,
     i18n,
     store,

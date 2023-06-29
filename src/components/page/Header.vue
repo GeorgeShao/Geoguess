@@ -10,26 +10,30 @@
             </router-link>
 
             <div class="flex-grow-1" />
-            
-            <v-app-bar-nav-icon class="header__nav-icon" @click="menuMobile = !menuMobile"></v-app-bar-nav-icon>
-            <nav class="header__nav" :class="{visible: menuMobile}">
-                <v-btn id="historyBtn" text>
-                    <router-link to="/history">
-                        {{ $t('Home.historyBtn') }}
-                    </router-link>
+
+            <v-app-bar-nav-icon
+                class="header__nav-icon"
+                @click="menuMobile = !menuMobile"
+            ></v-app-bar-nav-icon>
+            <nav class="header__nav" :class="{ visible: menuMobile }">
+                <v-btn id="historyBtn" text link to="/history">
+                    {{ $t('Home.historyBtn') }}
+                </v-btn>
+                <v-btn id="historyBtn" text link to="/medals">
+                    {{ $t('Home.medalsBtn') }}
                 </v-btn>
                 <div class="header__nav__btns">
-                    <v-btn id="aboutBtn" text @click="aboutDialog = true">
+                    <v-btn id="aboutBtn" icon @click="aboutDialog = true">
                         <v-icon size="30"> mdi-help-circle </v-icon>
                     </v-btn>
-                    <v-btn text @click="changeStreamerMode(!streamerMode)">
+                    <v-btn icon @click="changeStreamerMode(!streamerMode)">
                         <v-icon size="30">
                             mdi-eye{{ streamerMode ? '-off' : '' }}
                         </v-icon>
                     </v-btn>
                     <v-menu>
                         <template v-slot:activator="{ on }">
-                            <v-btn id="languageBtn" text v-on="on">
+                            <v-btn id="languageBtn" icon v-on="on">
                                 <v-icon size="30"> mdi-translate </v-icon>
                             </v-btn>
                         </template>
@@ -65,36 +69,25 @@
                 </v-col>
             </v-row>
         </v-alert>
-        <v-alert
-            type="success"
-            v-model="showAlertStreamerMode"
-            dismissible
-            transition="slide-x-reverse-transition"
-            id="alertStreamerMode"
-            icon="mdi-twitch"
-            color="streamerMode"
-        >
-            <h4>{{ $t('Home.streamerModeActivate') }}</h4>
-            <p>{{ $t('Home.streamerModeDetails') }}</p>
-        </v-alert>
+        <HeaderAlert />
     </div>
 </template>
 <script>
 import About from '@/components/page/About';
-import { languages } from '../../lang';
-import { mapMutations, mapState } from 'vuex';
-import * as MutationTypes from '@/store/mutation-types';
+import { languages, RTL_LANGUAGES } from '../../lang';
+import { mapActions, mapState } from 'vuex';
+import HeaderAlert from './HeaderAlert.vue';
 
 export default {
     components: {
         About,
+        HeaderAlert,
     },
     data() {
         return {
             aboutDialog: false,
             languages,
             menuMobile: false,
-            showAlertStreamerMode: false,
         };
     },
     computed: {
@@ -106,20 +99,14 @@ export default {
         },
     },
     methods: {
-        ...mapMutations({
-            setStreamerMode: MutationTypes.HOME_SET_STREAMER_MODE,
-        }),
-        changeStreamerMode(streamerMode){
+        ...mapActions(['setStreamerMode']),
+        changeStreamerMode(streamerMode) {
             this.setStreamerMode(streamerMode);
-            if(streamerMode){
-                this.showAlertStreamerMode = true;
-            } else if(this.showAlertStreamerMode){
-                this.showAlertStreamerMode = false;
-            }
         },
         switchLanguage(language) {
-            this.$i18n.locale = language;
+            this.$root.$i18n.locale = language;
             this.$vuetify.lang.current = language;
+            this.$vuetify.rtl = RTL_LANGUAGES.includes(language);
             this.saveLanguage(language);
         },
         saveLanguage(language) {
@@ -136,9 +123,14 @@ export default {
     .header__nav,
     .header__nav__btns {
         display: flex;
+        align-items: center;        
         & > div {
             margin: 0 1.5rem;
         }
+    }
+    .header__nav__btns .v-btn{
+        color: rgba(0, 0, 0, 0.87);
+        margin: 0.25rem;
     }
     .v-btn {
         a {
@@ -148,25 +140,18 @@ export default {
         font-size: 1.2rem;
     }
     .header__logo {
-        height: 6rem;
+        height: 5rem;
         width: auto;
     }
     .header__logo-min {
         display: none;
     }
-    .header__nav-icon{
-        visibility: hidden;
+    .header__nav-icon {
+       display: none;
     }
 }
 
-#alertStreamerMode {
-    width: fit-content;
-    position: absolute;
-    z-index: 2;
-    right: 0;
-    margin: 0.625rem;
-}
-@media (max-width: 780px) {
+@media (max-width: 840px) {
     .header {
         .header__logo {
             display: none;
@@ -174,8 +159,8 @@ export default {
         .header__logo-min {
             display: block;
         }
-        .header__nav{
-            &:not(.visible){
+        .header__nav {
+            &:not(.visible) {
                 display: none;
             }
             position: absolute;
@@ -184,16 +169,18 @@ export default {
             background: #f1e9d6;
             padding: 1rem;
             box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%);
-            border-bottom-left-radius: .3125rem;
-            border-bottom-right-radius: .3125rem;
+            border-bottom-left-radius: 0.3125rem;
+            border-bottom-right-radius: 0.3125rem;
             max-width: 100%;
             flex-direction: row;
-            .header__nav__btns{
+            flex-wrap: wrap;
+            overflow-y: auto;
+            .header__nav__btns {
                 margin: 0;
             }
         }
-        .header__nav-icon{
-            visibility: visible;
+        .header__nav-icon {
+            display: flex;
         }
     }
 }

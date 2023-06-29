@@ -2,7 +2,9 @@
     "Home": {
         "placeVisited": "0 lieu visité | 1 lieu visité | {count} lieux visités",
         "historyBtn": "Historique",
+        "medalsBtn": "MEDAILLES",
         "about": "A PROPOS",
+        "createMap": "Créer une carte",
         "searchBar": {
             "customLoaded": "Une carte personnalisée a été chargée",
             "enterCity": "Saisissez une ville, une région ou un pays"
@@ -24,7 +26,31 @@
         "limitationDescription": "Actuellement, j'ai fixé un quota par jour afin que le coût du jeu ne soit pas élevé.            Si la carte ne se charge pas, cela signifie que le quota a été dépassé.            Il est réinitialisé à minuit (heure du pacifique). Désolé pour le dérangement.             Le jeu est open source, ainsi il vous est possible de créer votre propre jeu pour y jouer sans limite.",
         "play": "Jouer",
         "streamerModeActivate": "Mode Streamer activé",
-        "streamerModeDetails": "Les URLs et les noms des salles sont masqués"
+        "streamerModeDetails": "Les URLs et les noms des salles sont masqués",
+        "mapSavedAlert": {
+            "title": "Carte sauvegardée 🎉",
+            "subtitle": "Vous la trouverez dans vos listes de cartes"
+        },
+        "HomeCard": {
+            "edit": "Éditer",
+            "delete": "Supprimer",
+            "medal": {
+                "platinum": "Platine",
+                "gold": "Or",
+                "silver": "Argent",
+                "bronze": "Bronze"
+            }
+        },
+        "HomeCardMode": {
+            "map": "Carte",
+            "area": "Zone"
+        },
+        "Sections": {
+            "areasTitle": "Zones",
+            "mapsTitle": "Cartes",
+            "pleaseSelectLabel": "Vous semblez perdu, veuillez sélectionner un critère ou vous pouvez ",
+            "barrelRoll": "faîtes un tonneau"
+        }
     },
     "StreetView": {
         "nearby": {
@@ -44,7 +70,7 @@
         "nextRound": "MANCHE SUIVANTE",
         "viewSummary": "VOIR LE RÉSUMÉ",
         "exit": "QUITTER",
-        "reset": "RÉINIT.",
+        "reset": "RÉINITIALISER",
         "playAgain": "REJOUER",
         "infoWindow": {
             "Distance": "Distance",
@@ -75,16 +101,24 @@
         "edit": "Editer la carte",
         "fileLabel": "Selectionner un fichier GeoJSON",
         "OK": "OK",
-        "download": "Télécharger GeoJSON"
+        "download": "Télécharger GeoJSON",
+        "Clean": "Effacer",
+        "save": "enregistrer",
+        "inputName": {
+            "label": "Nom de la carte",
+            "placeholder": "Mon lieu favori"
+        }
     },
     "History": {
         "title": "Historique",
         "date": "Date",
         "mode": "Mode",
+        "mapName": "Nom de la carte",
         "time": "Temps",
         "distance": "Distance",
         "points": "Points",
         "rank": "Classement",
+        "actions": "Actions",
         "search": "Rechercher",
         "exportGeoSave": "Exporter en GeoSave",
         "importGeoSave": "Import une GeoSave",
@@ -115,6 +149,12 @@
         "title": "Saisir le temps maximum par manche.",
         "infinite": "Infini"
     },
+    "CardRoomMap": {
+        "title": "Définissez votre carte",
+        "loadBtn": "Charger la carte",
+        "reset": "Réinitialiser",
+        "cantPlayGeoJson": "GeoJSON invalide, vous devez avoir plus de 5 positions."
+    },
     "CardRoomSettings": {
         "title": "Paramètre de la partie",
         "modeLabel": "Choisissez le mode de jeu",
@@ -129,7 +169,10 @@
         "scoreModes": {
             "normal": "normal",
             "time": "temps"
-        }
+        },
+        "selectAreas": "Sélectionner les zones",
+        "moreSettings": "Paramètres avancés",
+        "optimiseStreetView": "StreetView Optimiser (uniquement officiel)"
     },
     "CardRoomDifficulty": {
         "title": "Saisir la difficulté.",
@@ -154,7 +197,8 @@
     },
     "modes": {
         "classic": "Classique",
-        "country": "Pays"
+        "country": "Pays",
+        "custom_area": "Cibler"
     },
     "Demo": {
         "message": "Tu souhaites contribuer au projet et le rendre meilleur, ton aide est la bienvenue :  Traduction 🔠, Créateur de carte 🌍, Code 💻, Idée 💡, Beta test 👀.",
@@ -162,5 +206,9 @@
     },
     "OK": "OK",
     "yes": "oui",
-    "no": "non"
+    "no": "non",
+    "AlertUpdate": {
+        "label": "Une nouvelle version est disponible. Cliquez sur le bouton pour l'obtenir.",
+        "btn": "Mettre à jour"
+    }
 }

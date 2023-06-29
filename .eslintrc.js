@@ -5,7 +5,9 @@ module.exports = {
         es6: true,
     },
     extends: [
-        'eslint:recommended',
+        ...(process.env.NODE_ENV === 'production'
+            ? ['eslint:recommended']
+            : []),
         'plugin:vue/essential',
     ],
     globals: {
@@ -15,14 +17,17 @@ module.exports = {
         SharedArrayBuffer: 'readonly',
     },
     parserOptions: {
-        ecmaVersion: 2018,
+        ecmaVersion: 2020,
         sourceType: 'module',
     },
     plugins: ['vue', 'prettier'],
     rules: {
-        'no-console': 'warn',
+        'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'warn',
+        'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
         semi: ['error', 'always'],
-        "vue/html-indent": ['warn', 4]
+        'vue/html-indent': ['warn', 4],        
+        "vue/multi-word-component-names": 'off',
+        'vue/valid-v-slot': 'off',
     },
     overrides: [
         {

@@ -2,7 +2,9 @@
     "Home": {
         "placeVisited": "0 platser besökta | 1 plats besökt | {count} platser besökta",
         "historyBtn": "HISTORIK",
+        "medalsBtn": "MEDALJER",
         "about": "OM",
+        "createMap": "Skapa karta",
         "searchBar": {
             "customLoaded": "Egen karta har laddats",
             "enterCity": "Ange stad, region eller land"
@@ -24,7 +26,31 @@
         "limitationDescription": "För nuvarande sätter jag begränsningar per dag för att kostnadena för spelet inte ska bli för höga.             Om kartan inte laddar innebär det att den åtkomliga mängden har förbrukats.              Den kommer att återställas vid midnatt Pacific Time(UTC-8) Ursäktar för besvären.             This game is open source so you can build your own game server and play this game unlimitedly.",
         "play": "Spela",
         "streamerModeActivate": "Aktivera streamerläge",
-        "streamerModeDetails": "URLer och rumsnamn göms"
+        "streamerModeDetails": "URLer och rumsnamn göms",
+        "mapSavedAlert": {
+            "title": "Karta sparad 🎉",
+            "subtitle": "Du kan hitta den i din kartlista"
+        },
+        "HomeCard": {
+            "edit": "Redigera",
+            "delete": "Radera",
+            "medal": {
+                "platinum": "Platina",
+                "gold": "Guld",
+                "silver": "Silver",
+                "bronze": "Brons"
+            }
+        },
+        "HomeCardMode": {
+            "map": "Karta",
+            "area": "Yta"
+        },
+        "Sections": {
+            "areasTitle": "Areas",
+            "mapsTitle": "Maps",
+            "pleaseSelectLabel": "Du verkar vilse, vänligen välj en typ eller så kan du",
+            "barrelRoll": "göra en slumpväljning"
+        }
     },
     "StreetView": {
         "nearby": {
@@ -75,16 +101,24 @@
         "edit": "Redigera karta",
         "fileLabel": "Välj GeoJSON-fil",
         "OK": "OK",
-        "download": "Ladda ner GeoJSON"
+        "download": "Ladda ner GeoJSON",
+        "Clean": "Rensa",
+        "save": "spara",
+        "inputName": {
+            "label": "Kartnamn",
+            "placeholder": "Min favoritplats"
+        }
     },
     "History": {
         "title": "Historik",
         "date": "Datum",
         "mode": "Läge",
+        "mapName": "Kartnamn",
         "time": "Tid",
         "distance": "Distans",
         "points": "Poäng",
         "rank": "Rank",
+        "actions": "Actions",
         "search": "Sök",
         "exportGeoSave": "Exportera GeoSave",
         "importGeoSave": "Importera GeoSave",
@@ -115,6 +149,12 @@
         "title": "Sätt en tidsbegränsning.",
         "infinite": "Oändlig"
     },
+    "CardRoomMap": {
+        "title": "Definiera din karta",
+        "loadBtn": "Ladda KARTA",
+        "reset": "Återställ",
+        "cantPlayGeoJson": "Ogiltig GeoJSON, du måste ha fler än 5 positioner."
+    },
     "CardRoomSettings": {
         "title": "Spelinställningar",
         "modeLabel": "Välj spelläge",
@@ -129,7 +169,10 @@
         "scoreModes": {
             "normal": "normal",
             "time": "tid"
-        }
+        },
+        "selectAreas": "Välj ytor",
+        "moreSettings": "More settings",
+        "optimiseStreetView": "StreetView Optimize (only official)"
     },
     "CardRoomDifficulty": {
         "title": "Sätt en svårighetsgrad.",
@@ -154,7 +197,8 @@
     },
     "modes": {
         "classic": "Klassiskt",
-        "country": "Välj land"
+        "country": "Välj land",
+        "custom_area": "Välj"
     },
     "Demo": {
         "message": "Om du vill bidra till ett projekt och göra det bättre är din hjälp väldigt välkommen :  Översättning 🔠, Kartor 🌍, Kod 💻, Idéer 💡, Betatestning 👀.",
@@ -162,5 +206,9 @@
     },
     "OK": "OK",
     "yes": "ja",
-    "no": "nej"
+    "no": "nej",
+    "AlertUpdate": {
+        "label": "En ny version finns tillgänglig. Klicka på knappen för att komma åt den.",
+        "btn": "Uppdatera"
+    }
 }

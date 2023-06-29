@@ -1,8 +1,10 @@
 {
     "Home": {
-        "placeVisited": "0 place visited | 1 place visited | {count} places visited",
+        "placeVisited": "0 locais visitados | 1 local visitado | {count} lugares visitados",
         "historyBtn": "HISTÓRICO",
+        "medalsBtn": "MEDALS",
         "about": "SOBRE",
+        "createMap": "Create Map",
         "searchBar": {
             "customLoaded": "O mapa personalizado foi carregado",
             "enterCity": "Insira uma cidade, estado ou país"
@@ -23,8 +25,32 @@
         "limitation": "LIMITAÇÃO",
         "limitationDescription": "Atualmente estabeleço uma cota por dia para que o custo do jogo não seja alto.                Se o mapa não carregar, significa que as cotas do dia foram excedidas                Sempre à meia-noite(horário do Pacífico) as cotas são reiniciadas. Desculpe pela inconveniência.                 O jogo é open source, então você pode criar sua propria versão deste jogo para jogar sem limites.",
         "play": "Jogar",
-        "streamerModeActivate": "Streamer mode activate",
-        "streamerModeDetails": "URLs and room names are hidden"
+        "streamerModeActivate": "Modo streamer ativado",
+        "streamerModeDetails": "URLs e nomes de salas estão ocultos",
+        "mapSavedAlert": {
+            "title": "Map saved 🎉",
+            "subtitle": "You will find it in your map lists"
+        },
+        "HomeCard": {
+            "edit": "Edit",
+            "delete": "Delete",
+            "medal": {
+                "platinum": "Platinum",
+                "gold": "Gold",
+                "silver": "Silver",
+                "bronze": "Bronze"
+            }
+        },
+        "HomeCardMode": {
+            "map": "Map",
+            "area": "Area"
+        },
+        "Sections": {
+            "areasTitle": "Areas",
+            "mapsTitle": "Maps",
+            "pleaseSelectLabel": "You seems lost, please select a type or you can ",
+            "barrelRoll": "do a barrel roll"
+        }
     },
     "StreetView": {
         "nearby": {
@@ -75,16 +101,24 @@
         "edit": "Editar o mapa",
         "fileLabel": "Selecione um arquivo GeoJSON",
         "OK": "OK",
-        "download": "Baixar GeoJSON"
+        "download": "Baixar GeoJSON",
+        "Clean": "Clean",
+        "save": "save",
+        "inputName": {
+            "label": "Map Name",
+            "placeholder": "My favorite place"
+        }
     },
     "History": {
         "title": "Histórico",
         "date": "Data",
         "mode": "Modo",
+        "mapName": "Map Name",
         "time": "Tempo",
         "distance": "Distância",
         "points": "Pontos",
         "rank": "Classificação",
+        "actions": "Actions",
         "search": "Pesquisa",
         "exportGeoSave": "Exportar GeoSave",
         "importGeoSave": "Importar GeoSave",
@@ -104,9 +138,9 @@
     },
     "CardRoomPlayerName": {
         "title": "Sala:",
-        "input": "Type a player name.",
+        "input": "Digite um nome de jogador.",
         "anonymousPlayerName": "Anônimo 🕵",
-        "players": "1 player | {count} players"
+        "players": "1 jogador | {count} jogadores"
     },
     "CardRoomSize": {
         "title": "Defina o tamanho da sala."
@@ -114,6 +148,12 @@
     "CardRoomTime": {
         "title": "Defina o tempo limite.",
         "infinite": "Infinito"
+    },
+    "CardRoomMap": {
+        "title": "Define your map",
+        "loadBtn": "Load MAP",
+        "reset": "Reset",
+        "cantPlayGeoJson": "Invalid GeoJSON, you need to have more than 5 positions."
     },
     "CardRoomSettings": {
         "title": "Configurações da partida",
@@ -124,12 +164,15 @@
         "allowMove": "Permitir movimento",
         "allowZoom": "Permitir Zoom",
         "allowPan": "Permitir Visão Panorâmica",
-        "countDownLabel": "CountDown (seconds)",
-        "scoreModeLabel": "Score formula",
+        "countDownLabel": "Contagem regressiva (segundos)",
+        "scoreModeLabel": "Fórmula de pontuação",
         "scoreModes": {
             "normal": "normal",
-            "time": "time"
-        }
+            "time": "tempo"
+        },
+        "selectAreas": "Select Areas",
+        "moreSettings": "More settings",
+        "optimiseStreetView": "StreetView Optimize (only official)"
     },
     "CardRoomDifficulty": {
         "title": "Defina a dificuldade.",
@@ -154,7 +197,8 @@
     },
     "modes": {
         "classic": "Clássico",
-        "country": "Escolha o país"
+        "country": "Escolha o país",
+        "custom_area": "Pick"
     },
     "Demo": {
         "message": "Se você quer contribuir com o projeto e torná-lo cada vez melhor, sua ajuda é muito bem-vinda: Tradução 🔠, Criador de mapas 🌍, Desenvolvimento 💻, Ideias 💡, Beta test 👀.",
@@ -162,5 +206,9 @@
     },
     "OK": "OK",
     "yes": "Sim",
-    "no": "Não"
+    "no": "Não",
+    "AlertUpdate": {
+        "label": "A new version is available. Click on the button to obtain it.",
+        "btn": "Update"
+    }
 }

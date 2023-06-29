@@ -2,7 +2,9 @@
     "Home": {
         "placeVisited": "0 place visited | 1 place visited | {count} places visited",
         "historyBtn": "歴史",
+        "medalsBtn": "MEDALS",
         "about": "このサイトについて",
+        "createMap": "地図を作成",
         "searchBar": {
             "customLoaded": "カスタムマップが読み込まれました",
             "enterCity": "都市名、州や県、国名を入力してください"
@@ -24,7 +26,31 @@
         "limitationDescription": "地図とストリートビューを表示させるのにお金がかかるため制限をかけています。        1日の制限を超えると地図が正しくロードされなくなります。         制限は太平洋標準時での深夜にリセットされます。        このサイトはオープンソースなので制限なく遊びたい方は自分でゲームをセットアップすることもできます。",
         "play": "プレイ",
         "streamerModeActivate": "Streamer mode activate",
-        "streamerModeDetails": "URLs and room names are hidden"
+        "streamerModeDetails": "URLs and room names are hidden",
+        "mapSavedAlert": {
+            "title": "マップを保存しました 🎉",
+            "subtitle": "地図リストに表示されます"
+        },
+        "HomeCard": {
+            "edit": "編集",
+            "delete": "削除",
+            "medal": {
+                "platinum": "Platinum",
+                "gold": "ゴールド",
+                "silver": "シルバー",
+                "bronze": "Bronze"
+            }
+        },
+        "HomeCardMode": {
+            "map": "Map",
+            "area": "Area"
+        },
+        "Sections": {
+            "areasTitle": "Areas",
+            "mapsTitle": "Maps",
+            "pleaseSelectLabel": "失われたようです。タイプを選択するか、可能です。 ",
+            "barrelRoll": "バレルロールを使って"
+        }
     },
     "StreetView": {
         "nearby": {
@@ -75,16 +101,24 @@
         "edit": "Edit Map",
         "fileLabel": "Select GeoJSON file",
         "OK": "OK",
-        "download": "Download GeoJSON"
+        "download": "Download GeoJSON",
+        "Clean": "クリーンアップ",
+        "save": "保存",
+        "inputName": {
+            "label": "地図名",
+            "placeholder": "お気に入りの場所"
+        }
     },
     "History": {
         "title": "History",
         "date": "Date",
         "mode": "Mode",
+        "mapName": "地図名",
         "time": "Time",
         "distance": "Distance",
         "points": "Points",
         "rank": "Rank",
+        "actions": "Actions",
         "search": "Search",
         "exportGeoSave": "Export GeoSave",
         "importGeoSave": "Import GeoSave",
@@ -115,6 +149,12 @@
         "title": "1ラウンドの制限時間を選択して下さい。",
         "infinite": "無制限"
     },
+    "CardRoomMap": {
+        "title": "地図を定義する",
+        "loadBtn": "MAP を読み込む",
+        "reset": "Reset",
+        "cantPlayGeoJson": "ジオJSONが無効です。5つ以上のポジションが必要です。"
+    },
     "CardRoomSettings": {
         "title": "Game Settings",
         "modeLabel": "Select game mode",
@@ -129,7 +169,10 @@
         "scoreModes": {
             "normal": "normal",
             "time": "time"
-        }
+        },
+        "selectAreas": "Select Areas",
+        "moreSettings": "More settings",
+        "optimiseStreetView": "StreetViewの最適化 (公式のみ)"
     },
     "CardRoomDifficulty": {
         "title": "Set a difficulty level.",
@@ -154,7 +197,8 @@
     },
     "modes": {
         "classic": "Classic",
-        "country": "Pick country"
+        "country": "Pick country",
+        "custom_area": "Pick"
     },
     "Demo": {
         "message": "If you want to contribute to a project and make it better, your help is very welcome :  Translation 🔠, Mapper 🌍, Code 💻, Idea 💡, Beta test 👀.",
@@ -162,5 +206,9 @@
     },
     "OK": "OK",
     "yes": "yes",
-    "no": "no"
+    "no": "no",
+    "AlertUpdate": {
+        "label": "新しいバージョンが利用可能です。ボタンをクリックして入手してください。",
+        "btn": "更新"
+    }
 }

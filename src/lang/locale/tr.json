@@ -2,7 +2,9 @@
     "Home": {
         "placeVisited": "0 yer gezildi | 1 yer gezildi | {count} yer gezildi",
         "historyBtn": "GEÇMİŞ",
+        "medalsBtn": "MADALYALAR",
         "about": "HAKKINDA",
+        "createMap": "Harita Oluştur",
         "searchBar": {
             "customLoaded": "Özel harita yüklendi",
             "enterCity": "Bir şehir, bölge veya ülke girin"
@@ -24,7 +26,31 @@
         "limitationDescription": "Şu anda oyunun maliyetinin yüksek olmaması için günlük kota belirledim.            Eğer harita yüklenmediyse o günkü kota aşılmış anlamına gelir.            Kota, Pasifik Saatine göre gece yarısı sıfırlanacaktır. Rahatsızlıktan dolayı üzgünüm.             Oyun açık kaynak kodlu olduğundan dolayı kendi oyun sunucunuzu kurabilir ve sınırsızca oynayabilirsiniz.",
         "play": "Oyna",
         "streamerModeActivate": "Yayıncı modu aktif",
-        "streamerModeDetails": "Bağlantılar ve oda isimleri artık gizli"
+        "streamerModeDetails": "Bağlantılar ve oda isimleri artık gizli",
+        "mapSavedAlert": {
+            "title": "Harita Kaydedildi",
+            "subtitle": "Harita listelerinizde bulabilirsiniz"
+        },
+        "HomeCard": {
+            "edit": "Düzenle",
+            "delete": "Sil",
+            "medal": {
+                "platinum": "Platin",
+                "gold": "Altın",
+                "silver": "Gümüş",
+                "bronze": "Bronz"
+            }
+        },
+        "HomeCardMode": {
+            "map": "Map",
+            "area": "Area"
+        },
+        "Sections": {
+            "areasTitle": "Areas",
+            "mapsTitle": "Maps",
+            "pleaseSelectLabel": "You seems lost, please select a type or you can ",
+            "barrelRoll": "do a barrel roll"
+        }
     },
     "StreetView": {
         "nearby": {
@@ -75,16 +101,24 @@
         "edit": "Haritayı Düzenle",
         "fileLabel": "GeoJSON dosyası seç",
         "OK": "Onayla",
-        "download": "GeoJSON İndir"
+        "download": "GeoJSON İndir",
+        "Clean": "Temizle",
+        "save": "kaydet",
+        "inputName": {
+            "label": "Harita İsmi",
+            "placeholder": "Favori Mekanlara Ekle"
+        }
     },
     "History": {
         "title": "Geçmiş",
         "date": "Tarih",
         "mode": "Mod",
+        "mapName": "Harita İsmi",
         "time": "Zaman",
         "distance": "Mesafe",
         "points": "Puanlar",
         "rank": "Rütbe",
+        "actions": "Actions",
         "search": "Ara",
         "exportGeoSave": "GeoSave'i Dışarı Aktar",
         "importGeoSave": "GeoSave'i İçeri Aktar",
@@ -115,6 +149,12 @@
         "title": "Bir zaman sınırlaması ayarlayın.",
         "infinite": "Sınırsız"
     },
+    "CardRoomMap": {
+        "title": "Haritanızı Tanımlayın",
+        "loadBtn": "Harita Yükle",
+        "reset": "Sıfırla",
+        "cantPlayGeoJson": "Invalid GeoJSON, you need to have more than 5 positions."
+    },
     "CardRoomSettings": {
         "title": "Oyun Ayarları",
         "modeLabel": "Oyun modu seç",
@@ -129,7 +169,10 @@
         "scoreModes": {
             "normal": "normal",
             "time": "zaman"
-        }
+        },
+        "selectAreas": "Select Areas",
+        "moreSettings": "More settings",
+        "optimiseStreetView": "StreetView Optimize (only official)"
     },
     "CardRoomDifficulty": {
         "title": "Zorluk seviyesi seç.",
@@ -154,7 +197,8 @@
     },
     "modes": {
         "classic": "Klasik",
-        "country": "Ülke seç"
+        "country": "Ülke seç",
+        "custom_area": "Pick"
     },
     "Demo": {
         "message": "Eğer bir projede katkınızın bulunmasını istiyorsanız kapımız her zaman açık : Çeviri🔠, Haritacı 🌍, Yazılımcı 💻, Fikir 💡, Beta test 👀.",
@@ -162,5 +206,9 @@
     },
     "OK": "Onayla",
     "yes": "evet",
-    "no": "hayır"
+    "no": "hayır",
+    "AlertUpdate": {
+        "label": "Yeni bir sürüm mevcut. Güncellemek için butona tıklayın.",
+        "btn": "Güncelle"
+    }
 }
